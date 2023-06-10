@@ -16,7 +16,8 @@ practicing containerization of python applications uisng docker
 1. `docker-compose up`
 2. `docker-compose up -d` for detached mode
 3. `docker-compose up --build` to rebuild the app service
-4. in the app service user this after --ports for enabling ipdb debugging tool
+4. `docker-compose exec -it <container_name or id>` to go inside the container. Ex: `docker exec -it postgres-container /bin/sh` -> `psql --username postgres` to interact with postgres database
+5. in the app service user this after --ports for enabling ipdb debugging tool
     * ` stdin_open: true`
     * `tty: true`
     * and then in a new terminal window `docker attach <container_name or container_id>` for interacting with ipdb debugging tool

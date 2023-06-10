@@ -1,17 +1,43 @@
+version: '3.8'
 services:
   app:
     build: .
     container_name: docker-practice-container
+    # custom image name for building the image from Dockerfile
+    image: docker-practice-image
     command: uvicorn src.main:app --host 0.0.0.0 --port 80 --reload
     ports: 
       - 80:80
     stdin_open: true
     tty: true
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: postgres
     volumes:
       - .:/code
     depends_on:
       - redis
+      - db
+
 
   redis:
     image: redis:alpine
     container_name: docker-practice-redis-container
+  
+  db:
+    image: postgres:15.3-alpine
+    restart: always
+    container_name: docker-practice-db-container
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
+    driver: local
